@@ -52,6 +52,24 @@ define(function(require, exports, module) {
             }
 
             return imgData;
+        },
+        scaleImageData: function(data, w, h) {
+            var dataW = data.width;
+            var dataH = data.height;
+
+            var dataCanvas = document.createElement('canvas');
+            var dataContext = dataCanvas.getContext('2d');
+            dataCanvas.width = dataW;
+            dataCanvas.height = dataH;
+            dataContext.putImageData(data, 0, 0);
+
+            var tempCanvas = document.createElement('canvas');
+            var tempContext = tempCanvas.getContext('2d');
+            tempCanvas.width = w;
+            tempCanvas.height = h;
+            tempContext.drawImage(dataCanvas, 0, 0, dataW, dataH, 0, 0, w, h);
+
+            return tempContext.getImageData(0, 0, w, h);
         }
     };
     util.DOM = {

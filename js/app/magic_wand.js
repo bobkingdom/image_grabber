@@ -4,6 +4,7 @@ define(function(require, exports, module) {
     var SelectionBuilder = require('app/selection_builder.js');
     var marchingAnts = require('app/marching_ants');
     var util = require('app/util');
+    var zoom = require('app/zoom');
 
     var artCanvas = document.querySelector('#artCanvas');
     var artContext = artCanvas.getContext('2d');
@@ -22,17 +23,25 @@ define(function(require, exports, module) {
 
     MagicWand.prototype.buildSelection = function(e) {
         var self = this;
-        var src = artContext.getImageData(0, 0, artCanvas.width, artCanvas.height);
+        var originalCanvas = artCanvas.origCanvas;
+        var originalContext = originalCanvas.getContext('2d');
+        var ratio = zoom.zoomRatio;
+        var src = originalContext.getImageData(0, 0, originalCanvas.width, originalCanvas.height);
         var point = util.canvas.windowToCanvas(e.clientX, e.clientY, artCanvas);
+        var relativePoint = {
+            x: Math.round(point.x / ratio),
+            y: Math.round(point.y / ratio)
+        };
         var selectedPixels;
 
         marchingAnts.deselect();
         selectionContext.clearRect(0, 0, selectionCanvas.width, selectionCanvas.height);
 
-        builder = new SelectionBuilder(src, point, self.tolerance, self.contiguous);
+        builder = new SelectionBuilder(src, relativePoint, self.tolerance, self.contiguous);
         builder.mask(function(selectedPixels) {
-            selectionCanvas.selectedPixels = util.canvas.copyImageData(selectedPixels);
-            marchingAnts.ants(selectionCanvas, selectedPixels);
+            selectionCanvas.selectedPixels = selectedPixels;
+            var pixels = util.canvas.scaleImageData(selectedPixels, selectionCanvas.width, selectionCanvas.height);
+            marchingAnts.ants(selectionCanvas, pixels);
         });
     };
 

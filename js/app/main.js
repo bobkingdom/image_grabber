@@ -79,24 +79,8 @@ define(function(require, exports, module) {
     // redraw selection marching ants
     util.Event.addEventListener('zoom', function(e) {
         if(!selectionCanvas.selectedPixels) return;
-        var dataW = selectionCanvas.selectedPixels.width;
-        var dataH = selectionCanvas.selectedPixels.height;
-        var w = artCanvas.width;
-        var h = artCanvas.height;
-
-        var dataCanvas = document.createElement('canvas');
-        var dataContext = dataCanvas.getContext('2d');
-        dataCanvas.width = dataW;
-        dataCanvas.height = dataH;
-        dataContext.putImageData(selectionCanvas.selectedPixels, 0, 0);
-
-        var tempCanvas = document.createElement('canvas');
-        var tempContext = tempCanvas.getContext('2d');
-        tempCanvas.width = w;
-        tempCanvas.height = h;
-        tempContext.drawImage(dataCanvas, 0, 0, dataW, dataH, 0, 0, w, h);
-
-        marchingAnts.ants(selectionCanvas, tempContext.getImageData(0, 0, w, h));
+        var pixels = util.canvas.scaleImageData(selectionCanvas.selectedPixels, selectionCanvas.width, selectionCanvas.height);
+        marchingAnts.ants(selectionCanvas, pixels);
     });
 
     // render placeholder image
