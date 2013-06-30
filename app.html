@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Canvas Image Grabber</title>
+<link rel="stylesheet" href="css/reset.css">
+<link href='http://fonts.googleapis.com/css?family=Quantico:400,700' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="css/main.css">
+<script src="js/seajs/sea.js" id="seajsnode" data-main="app/main"></script>
+</head>
+<body>
+<header id="pageHeader" class="pageHeader">
+  <h1>Canvas Image Grabber</h1>
+</header>
+<section id="tools" class="mainTools panel">
+  <h1>Tools</h1>
+  <ul class="toolsList">
+    <li class="tool"><span class="block magicWandTool" data-tool="magicWandTool">Magic Wand</span></li>
+    <!-- <li class="tool"><span class="block pathSelectionTool" data-tool="pathSelectionTool">Path Selection</span></li> -->
+    <li class="tool selected"><span class="block penTool" data-tool="penTool">Pen</span></li>
+    <li class="tool"><span class="block zoomTool" data-tool="zoomTool">Zoom</span></li>
+  </ul>
+</section>
+<section id="options" class="toolOptions panel">
+  <h1>Options</h1>
+  <div data-tool="save" class="centerText">
+    <ul>
+      <li><button id="saveBtn">Save Image</button></li>
+    </ul>
+  </div>
+  <hr>
+  <div data-tool="magicWand" class="hidden">
+    <ul>
+      <li class="option"><label for="mwContiguous"><input id="mwContiguous" type="checkbox" checked>Contiguous</label></li>
+      <li class="option"><label for="mwTolerance">Tolerance <input id="mwTolerance" type="number" min="0" max="255" value="32"></label></li>
+      <li class="option"><button id="mwDeselect">Deselect</button></li>
+    </ul>
+  </div>
+  <div data-tool="pen">
+    <ul>
+      <li class="option centerText">
+        <button id="pMask">Mask</button>
+        <button id="pUnmask">Unmask</button>
+      </li>
+    </ul>
+  </div>
+  <div data-tool="zoom" class="hidden">
+    <ul>
+      <li class="option centerText">
+        <button id="zActual">Actual Size</button>
+        <button id="zFit">Fit to window</button>
+      </li>
+      <li class="option">
+        <p>Use +/- keys to zoom in or out</p>
+        <p>DON'T zoom way in.<br>May cause performance issue</p>
+      </li>
+    </ul>
+  </div>
+</section>
+<section id="pasteBoard" class="pasteBoard">
+  <h1 class="hideText">Paste Board</h1>
+  <canvas id="artCanvas" width="640" height="400"></canvas>
+  <canvas id="selectionCanvas" width="0" height="0"></canvas>
+  <canvas id="penCanvas" width="0" height="0"></canvas>
+</section>
+</body>
+</html>
