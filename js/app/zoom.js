@@ -13,7 +13,7 @@ define(function(require, exports, module) {
 
     function Zoom() {
         var self = this;
-
+        self.name = 'zoom';
         self.zoomLevels = [1/12, 1/8, 1/6, 1/4, 1/3, 1/2, 2/3, 1, 2, 3, 4, 5, 6, 7, 8];
         self.zoomLevel = 7; // supports 0 - 14, 7 is 100%
         self.zoomRatio = 1;
@@ -99,7 +99,7 @@ define(function(require, exports, module) {
         if(artCanvas.isMasked) {
             artContext.drawImage(artCanvas.maskedCanvas, 0, 0, artCanvas.origWidth, artCanvas.origHeight, 0, 0, w, h);
         } else {
-            artContext.drawImage(artCanvas.origCanvas, 0, 0, artCanvas.origWidth, artCanvas.origHeight, 0, 0, w, h);
+            artContext.drawImage(artCanvas.compositCanvas, 0, 0, artCanvas.origWidth, artCanvas.origHeight, 0, 0, w, h);
         }
 
         util.canvas.center(artCanvas);

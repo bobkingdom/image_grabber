@@ -10,6 +10,7 @@ define(function(require, exports, module) {
 
     function Pen() {
         var self = this;
+        self.name = 'pen';
         self.cvs = document.querySelector('#penCanvas');
         self.ctx = self.cvs.getContext('2d');
         self.artCvs = document.querySelector('#artCanvas');

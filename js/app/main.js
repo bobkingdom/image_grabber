@@ -7,6 +7,7 @@ define(function(require, exports, module) {
     var pen = require('app/pen');
     var magicWand = require('app/magic_wand');
     var marchingAnts = require('app/marching_ants');
+    var selection = require('app/selection');
 
     var pasteBoard = document.querySelector('#pasteBoard');
     var artCanvas = document.querySelector('#artCanvas');
@@ -55,6 +56,16 @@ define(function(require, exports, module) {
             artCanvas.origCanvas.width = w;
             artCanvas.origCanvas.height = h;
             artCanvas.origCanvas.getContext('2d').drawImage(img, 0, 0);
+
+            artCanvas.bitmapMaskedCanvas = document.createElement('canvas');
+            artCanvas.bitmapMaskedCanvas.width = w;
+            artCanvas.bitmapMaskedCanvas.height = h;
+            artCanvas.bitmapMaskedCanvas.getContext('2d').drawImage(img, 0, 0);
+
+            artCanvas.compositCanvas = document.createElement('canvas');
+            artCanvas.compositCanvas.width = w;
+            artCanvas.compositCanvas.height = h;
+            artCanvas.compositCanvas.getContext('2d').drawImage(img, 0, 0);
 
             zoom.zoomTo(level);
             pen.reset();
@@ -112,18 +123,22 @@ define(function(require, exports, module) {
 
     // Pen Tool Options
     document.querySelector('#pMask').onclick = function(e) {
+        var compositCanvas = artCanvas.compositCanvas;
+        var compositContext = compositCanvas.getContext('2d');
         var w = artCanvas.origWidth * zoom.zoomRatio;
         var h = artCanvas.origHeight * zoom.zoomRatio;
+        var displayW = artCanvas.width;
+        var displayH = artCanvas.height;
         artCanvas.isMasked = true;
-        artCanvas.maskedCanvas = pen.getCanvas(artCanvas.origCanvas);
-        artContext.clearRect(0, 0, artCanvas.width, artCanvas.height);
+        artCanvas.maskedCanvas = pen.getCanvas(compositCanvas);
+        artContext.clearRect(0, 0, displayW, displayH);
         artContext.drawImage(artCanvas.maskedCanvas, 0, 0, artCanvas.origWidth, artCanvas.origHeight, 0, 0, w, h);
     };
     document.querySelector('#pUnmask').onclick = function(e) {
         var w = artCanvas.origWidth * zoom.zoomRatio;
         var h = artCanvas.origHeight * zoom.zoomRatio;
         artCanvas.isMasked = false;
-        artContext.drawImage(artCanvas.origCanvas, 0, 0, artCanvas.origWidth, artCanvas.origHeight, 0, 0, w, h);
+        artContext.drawImage(artCanvas.compositCanvas, 0, 0, artCanvas.origWidth, artCanvas.origHeight, 0, 0, w, h);
     };
 
     // Zoom Tool Options

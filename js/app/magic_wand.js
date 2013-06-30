@@ -16,17 +16,17 @@ define(function(require, exports, module) {
 
     function MagicWand() {
         var self = this;
-
+        self.name = 'magicwand';
         self.tolerance = 32/255;
         self.contiguous = true;
     }
 
     MagicWand.prototype.buildSelection = function(e) {
         var self = this;
-        var originalCanvas = artCanvas.origCanvas;
-        var originalContext = originalCanvas.getContext('2d');
+        var compositCanvas = artCanvas.compositCanvas;
+        var compositContext = compositCanvas.getContext('2d');
         var ratio = zoom.zoomRatio;
-        var src = originalContext.getImageData(0, 0, originalCanvas.width, originalCanvas.height);
+        var src = compositContext.getImageData(0, 0, compositCanvas.width, compositCanvas.height);
         var point = util.canvas.windowToCanvas(e.clientX, e.clientY, artCanvas);
         var relativePoint = {
             x: Math.round(point.x / ratio),
