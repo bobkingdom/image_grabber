@@ -30,14 +30,13 @@ define(function(require, exports, module) {
 
             artContext.save();
             artContext.globalCompositeOperation = 'destination-out';
-            artContext.webkitImageSmoothingEnabled = true;
-            artContext.mozImageSmoothingEnabled = true;
-            artContext.imageSmoothingEnabled = true;
             artContext.drawImage(tempCanvas, 0, 0, w, h, 0, 0, displayW, displayH);
             artContext.restore();
 
-            compositContext.clearRect(0, 0, w, h);
-            compositContext.drawImage(artCanvas, 0, 0, displayW, displayH, 0, 0, w, h);
+            compositContext.save();
+            compositContext.globalCompositeOperation = 'destination-out';
+            compositContext.drawImage(tempCanvas, 0, 0, w, h);
+            compositContext.restore();
         }
     };
 
