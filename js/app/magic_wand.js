@@ -23,21 +23,28 @@ define(function(require, exports, module) {
 
     MagicWand.prototype.buildSelection = function(e) {
         var self = this;
-        var compositCanvas = artCanvas.compositCanvas;
-        var compositContext = compositCanvas.getContext('2d');
         var ratio = zoom.zoomRatio;
-        var src = compositContext.getImageData(0, 0, compositCanvas.width, compositCanvas.height);
         var point = util.canvas.windowToCanvas(e.clientX, e.clientY, artCanvas);
-        var relativePoint = {
-            x: Math.round(point.x / ratio),
-            y: Math.round(point.y / ratio)
-        };
-        var selectedPixels;
+        var src;
+
+        if(ratio > 1) {
+            var tempCanvas = document.createElement('canvas');
+            var tempContext = tempCanvas.getContext('2d');
+            tempCanvas.width = artCanvas.origWidth;
+            tempCanvas.height = artCanvas.origHeight;
+            tempContext.drawImage(artCanvas, 0, 0, artCanvas.width, artCanvas.height, 0, 0, artCanvas.origWidth, artCanvas.origHeight);
+            src = tempContext.getImageData(0, 0, artCanvas.origWidth, artCanvas.origHeight);
+
+            point.x = Math.round(point.x / ratio);
+            point.y = Math.round(point.y / ratio);
+        } else {
+            src = artContext.getImageData(0, 0, artCanvas.width, artCanvas.height);
+        }
 
         marchingAnts.deselect();
         selectionContext.clearRect(0, 0, selectionCanvas.width, selectionCanvas.height);
 
-        builder = new SelectionBuilder(src, relativePoint, self.tolerance, self.contiguous);
+        builder = new SelectionBuilder(src, point, self.tolerance, self.contiguous);
         builder.mask(function(selectedPixels) {
             selectionCanvas.selectedPixels = selectedPixels;
             var pixels = util.canvas.scaleImageData(selectedPixels, selectionCanvas.width, selectionCanvas.height);
