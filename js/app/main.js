@@ -105,6 +105,22 @@ define(function(require, exports, module) {
 
     // ============================================
     // Tools' options
+    // Save Button
+    document.querySelector('#saveBtn').onclick = function(e) {
+        var dataURL;
+        if(artCanvas.isMasked) {
+            // If masked, needs to simulate mask button click before export image data
+            var event = document.createEvent('MouseEvents');
+            event.initMouseEvent('click', true, true, document.defaultView, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+            document.querySelector('#pMask').dispatchEvent(event);
+
+            dataURL = artCanvas.maskedCanvas.toDataURL();
+        } else {
+            dataURL = artCanvas.compositCanvas.toDataURL();
+        }
+        console.log(dataURL);
+    };
+
     // Magic Wand Options
     document.querySelector('#mwContiguous').onchange = function(e) {
         magicWand.contiguous = e.target.checked;

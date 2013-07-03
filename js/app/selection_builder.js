@@ -32,6 +32,10 @@ define(function(require, exports, module) {
             callback(e.data);
         };
 
+        worker.onerror = function(event) {
+            throw new Error(event.message + " (" + event.filename + ":" + event.lineno + ")");
+        };
+
         worker.postMessage({
             contiguous: self.contiguous,
             tolerance: self.tolerance,
