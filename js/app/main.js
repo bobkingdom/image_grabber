@@ -71,13 +71,12 @@ define(function(require, exports, module) {
             pen.reset();
         };
         img.src = data;
+        window.addEventListener('resize', redraw, false);
     }
 
     function redraw(e) {
         zoom.render();
     }
-
-    window.addEventListener('resize', redraw, false);
 
     // before zooming, clear marching ants
     util.Event.addEventListener('beforezoom', function(e) {
