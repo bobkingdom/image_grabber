@@ -167,6 +167,12 @@ define(function(require, exports, module) {
         zoom.zoomTo(level);
     };
 
+    // If any input box is focused, deactive Selection's delete functionality
+    Array.prototype.forEach.call(document.querySelectorAll('input[type=number]'), function(current) {
+        current.addEventListener('focus', function(){selection.deactive();}, false);
+        current.addEventListener('blur', function(){selection.active();}, false);
+    });
+
     // init
     tools.init('#tools');
 });

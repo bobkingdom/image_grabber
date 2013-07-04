@@ -6,7 +6,7 @@ define(function(require, exports, module) {
 
     function Selection() {
         var self = this;
-        document.addEventListener('keydown', self.deleteSelectedPixels, false);
+        self.active();
     }
 
     Selection.prototype.deleteSelectedPixels = function(e) {
@@ -38,6 +38,16 @@ define(function(require, exports, module) {
             compositContext.drawImage(tempCanvas, 0, 0, w, h);
             compositContext.restore();
         }
+    };
+
+    Selection.prototype.active = function() {
+        var self = this;
+        document.addEventListener('keydown', self.deleteSelectedPixels, false);
+    };
+
+    Selection.prototype.deactive = function() {
+        var self = this;
+        document.removeEventListener('keydown', self.deleteSelectedPixels);
     };
 
     return new Selection();
