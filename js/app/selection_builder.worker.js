@@ -7,7 +7,7 @@ addEventListener("message", function(event) {
     var dataToReturn = data.desData;
 
     var contiguous = data.contiguous;
-    var tolerance = data.tolerance;
+    var tolerance = parseInt(data.tolerance, 10);
 
     var visited = [];
     var marked = [];
@@ -31,10 +31,10 @@ addEventListener("message", function(event) {
     function searchEachPoint() {
         var pixels = dataToReturn.data;
 
-        for (var y = 0; y < dataToReturn.height; y++) {
-            var thisRow = y * dataToReturn.width;
+        for (var y = 0; y < data.height; y++) {
+            var thisRow = y * data.width;
 
-            for (var x = 0; x < dataToReturn.width; x++) {
+            for (var x = 0; x < data.width; x++) {
                 if (pixelMatches({x:x, y:y})) {
                     pixels[(thisRow + x) * 4] = 0x00;
                     pixels[(thisRow + x) * 4 + 1] = 0x00;
@@ -144,10 +144,10 @@ addEventListener("message", function(event) {
     function createMask() {
         var pixels = dataToReturn.data;
 
-        for (var y = 0; y < dataToReturn.height; y++) {
-            var thisRow = y * dataToReturn.width;
+        for (var y = 0; y < data.height; y++) {
+            var thisRow = y * data.width;
 
-            for (var x = 0; x < dataToReturn.width; x++) {
+            for (var x = 0; x < data.width; x++) {
                 if (marked[thisRow + x]) {
                     pixels[(thisRow + x) * 4] = 0x00;
                     pixels[(thisRow + x) * 4 + 1] = 0x00;
