@@ -46,7 +46,11 @@ define(function(require, exports, module) {
 
         builder = new SelectionBuilder(src, point, self.tolerance, self.contiguous);
         builder.mask(function(selectedPixels) {
-            selectionCanvas.selectedPixels = selectedPixels;
+            if(ratio < 1) {
+                selectionCanvas.selectedPixels = util.canvas.scaleImageData(selectedPixels, artCanvas.origWidth, artCanvas.origHeight);
+            } else {
+                selectionCanvas.selectedPixels = selectedPixels;
+            }
             var pixels = util.canvas.scaleImageData(selectedPixels, selectionCanvas.width, selectionCanvas.height);
             marchingAnts.ants(selectionCanvas, pixels);
         });
