@@ -1,4 +1,6 @@
 define(function(require, exports, module) {
+    require('app/canvas_to_blob');
+
     var SCALE = 3;
 
     var tools = require('app/tools');
@@ -106,7 +108,7 @@ define(function(require, exports, module) {
     // Tools' options
     // Save Button
     document.querySelector('#saveBtn').onclick = function(e) {
-        var dataURL;
+        /*var dataURL;
         if(artCanvas.isMasked) {
             // If masked, needs to simulate mask button click before export image data
             var event = document.createEvent('MouseEvents');
@@ -116,8 +118,25 @@ define(function(require, exports, module) {
             dataURL = artCanvas.maskedCanvas.toDataURL();
         } else {
             dataURL = artCanvas.compositCanvas.toDataURL();
+        }*/
+
+        function saveImage(blob) {
+            var a = document.createElement('a');
+            a.href = window.URL.createObjectURL(blob);
+            a.download = '图片.png';
+            a.textContent = '';
+            document.body.appendChild(a);
+            a.click();
         }
-        console.log(dataURL);
+
+        if(artCanvas.masked) {
+            var event = document.createEvent('MouseEvents');
+            event.initMouseEvent('click', true, true, document.defaultView, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+            document.querySelector('#pMask').dispatchEvent(event);
+            artCanvas.maskedCanvas.toBlob(saveImage);
+        } else {
+            artCanvas.compositCanvas.toBlob(saveImage);
+        }
     };
 
     // Magic Wand Options
