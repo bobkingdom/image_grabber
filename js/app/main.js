@@ -25,6 +25,28 @@ define(function(require, exports, module) {
         artContext.drawImage(loadImg, 0, 0);
     }
 
+    function enableOptions() {
+        var inputs = document.querySelectorAll('input');
+        var buttons = document.querySelectorAll('button');
+        Array.prototype.forEach.call(inputs, function(input) {
+            input.removeAttribute('disabled');
+        });
+        Array.prototype.forEach.call(buttons, function(button) {
+            button.removeAttribute('disabled');
+        });
+    }
+
+    function disableOptions() {
+        var inputs = document.querySelectorAll('input');
+        var buttons = document.querySelectorAll('button');
+        Array.prototype.forEach.call(inputs, function(input) {
+            input.setAttribute('disabled', 'disabled');
+        });
+        Array.prototype.forEach.call(buttons, function(button) {
+            button.setAttribute('disabled', 'disabled');
+        });
+    }
+
     function readFile(e) {
         e.preventDefault();
 
@@ -42,7 +64,13 @@ define(function(require, exports, module) {
 
     function reloadImage(data) {
         var img = new Image();
+        var options = document.querySelector('#options');
         img.onload = function(){
+            if(options.getAttribute('data-enabled') === '0') {
+                options.setAttribute('data-enabled', '1');
+                enableOptions();
+            }
+
             var w = img.width;
             var h = img.height;
             var winWidth = window.innerWidth;
@@ -193,5 +221,6 @@ define(function(require, exports, module) {
     });
 
     // init
+    disableOptions();
     tools.init('#tools');
 });
